@@ -1,0 +1,28 @@
+.error {
+    color: #ff0000;
+}
+
+.warning {
+    color: #ffff00;
+}
+
+.success {
+    color: #00ff00;
+}
+
+.normal {
+    color: #000000;
+}
+
+ul {
+    list-style: none;
+}
+
+input {
+    height: 5%;
+    width: 100%;
+}
+
+.container {
+    height: 90%;
+}

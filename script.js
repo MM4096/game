@@ -1,7 +1,8 @@
 var money = 0;
 var added = 0;
 // index 0 is used for begging
-var timeUsed = [0];
+// index 1 is used for working
+var timeUsed = [0, 0];
 
 //From mozarilla js docs (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
 function getRandomInt(min, max) {
@@ -33,6 +34,10 @@ function enter() {
         case "help":
             help();
             break;
+
+        case "work":
+            work();
+            break
         
         default:
             let cmdStr = "Invalid command '" + command[0] + "'. Use help to see a list of commands"
@@ -55,7 +60,7 @@ function beg() {
         }
         timeUsed[0] = Date.now();
     } else {
-        timeLeft = Math.ceil(5 - (Date.now() - timeUsed[0]) / 1000);
+        let timeLeft = Math.ceil(5 - (Date.now() - timeUsed[0]) / 1000);
         output("warning", "Chill out user! You can't beg so fast! You have " + timeLeft + " seconds before you can beg again");
     }
     
@@ -90,4 +95,18 @@ function balance() {
 
 function help() {
     output("normal", helpText)
+}
+
+function work() {
+    if (Date.now() - timeUsed[1] > 3600000) {     // 3600000 is one hour
+        added = getRandomInt(100, 500);
+        money += added;
+        let cmdStr = "You got $" + added + " for working!";
+        output("success", cmdStr);
+        timeUsed[1] = Date.now();
+    } else {
+        let timeLeft = Math.ceil(60 - (Date.now() - timeUsed[1])/60000);
+        let cmdStr = "Woah user! You're too exited for work! You have " + timeLeft + " minutes before you can work again!";
+        output("warning", cmdStr);
+    }
 }

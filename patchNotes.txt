@@ -1,0 +1,2 @@
+V0.1 Unreleased:
+Added begging, balance and help commands!

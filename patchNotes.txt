@@ -12,3 +12,10 @@ New Setting: settings logging on/off
 Balance Changes:
     Begging cooldown 5s -> 7s
     Working maximum money $500 max -> $250 max
+
+V0.3.1 Unreleased:
+
+Deleted the alert when leaving page
+
+Balance Changes:
+    Working maximum money $250 max -> $300 max

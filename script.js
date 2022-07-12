@@ -6,7 +6,6 @@ var timeUsed = [0, 0];
 
 window.onbeforeunload = function () {
     saveProgress();
-    return "Are you sure you want to leave? Progess is saved.";
 }
 
 
@@ -140,7 +139,7 @@ function help() {
 
 function work() {
     if (Date.now() - timeUsed[1] > 3600000) {     // 3600000 is one hour
-        added = getRandomInt(100, 250);
+        added = getRandomInt(100, 300);
         money += added;
         let cmdStr = "You got $" + added + " for working!";
         output("success", cmdStr);

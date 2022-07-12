@@ -1,1 +1,1 @@
-helpText = "HELP COMMAND CALLBACK\nCommands:<br>beg: use it every 5 seconds to gain money!<br>balance: see how much money you have!<br>work: work every hour to gain money!"
+helpText = "HELP COMMAND CALLBACK\nCommands:<br>beg: use it every 5 seconds to gain money!<br>balance: see how much money you have!<br>work: work every hour to gain money!<br>settings: change settings!"

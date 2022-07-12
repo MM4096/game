@@ -3,3 +3,12 @@ Added begging, balance and help commands!
 
 V0.2 Unreleased:
 Added working - once every hour!
+
+V0.3 Unreleased:
+Added auto-save (apon leaving), and loading.
+
+New Setting: settings logging on/off
+
+Balance Changes:
+    Begging cooldown 5s -> 7s
+    Working maximum money $500 max -> $250 max

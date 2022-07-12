@@ -1,8 +1,10 @@
 var money = 0;
 var added = 0;
+var workMoney = 0;
 // index 0 is used for begging
 // index 1 is used for working
-var timeUsed = [0, 0];
+// index 2 is for time before you can get a new job
+var timeUsed = [0, 0, 0];
 
 window.onbeforeunload = function () {
     saveProgress();
@@ -34,6 +36,21 @@ $(document).ready(function() {
             output("success", ">>Restored data component: timeUsed1");
         }
     }
+
+    if (localStorage.getItem("timeUsed2") != null) {
+        timeUsed[2] = parseFloat(localStorage.getItem("timeUsed2"));
+        if (localStorage.getItem("logging") == "True") {
+            output("success", ">>Restored data component: timeUsed2");
+        }
+    }
+
+    if (localStorage.getItem("jobMoney") != null) {
+        workMoney = parseFloat(localStorage.getItem("jobMoney"));
+        if (localStorage.getItem("logging") == "True") {
+            output("success", ">>Restored data component: jobMoney");
+        }
+    }
+
     output("warning", "To turn on/off logging, use settings logging on/off");
 
 })
@@ -77,7 +94,10 @@ function enter() {
         case "settings":
             settings(command[1], command[2]);
             break
-        
+
+        case "job":
+            job();
+            break
 
         default:
             let cmdStr = "Invalid command '" + command[0] + "'. Use help to see a list of commands"
@@ -97,7 +117,7 @@ function beg() {
             output("success", cmdStr);
     
         } else {
-            output("normal", "You got nothing. At least you tried >:)");
+            output("normal", "You got nothing. At least you tried");
         }
         timeUsed[0] = Date.now();
     } else {
@@ -140,11 +160,18 @@ function help() {
 
 function work() {
     if (Date.now() - timeUsed[1] > 3600000) {     // 3600000 is one hour
-        added = getRandomInt(150, 300);
-        money += added;
-        let cmdStr = "You got $" + added + " for working!";
-        output("success", cmdStr);
-        timeUsed[1] = Date.now();
+        if (workMoney > 0) {
+            added = workMoney;
+            money += added;
+            let cmdStr = "You got $" + added + " for working!";
+            output("success", cmdStr);
+            timeUsed[1] = Date.now();
+        } else {
+            output("warning", "You need a job first! Use <i>job</i> to get a job.")
+            if (localStorage.getItem("logging") == "True") {
+                output("warning", ">>Work timer not reset. Reason: Didn't work")
+            }
+        }
     } else {
         let timeLeft = Math.ceil(60 - (Date.now() - timeUsed[1])/60000);
         let cmdStr = "Woah user! You're too exited for work! You have " + timeLeft + " minutes before you can work again!";
@@ -156,6 +183,8 @@ function saveProgress() {
     localStorage.setItem("money", money);
     localStorage.setItem("timeUsed0", timeUsed[0]);
     localStorage.setItem("timeUsed1", timeUsed[1]);
+    localStorage.setItem("timeUsed2", timeUsed[2]);
+    localStorage.setItem("jobMoney", workMoney);
 }
 
 function settings(settingName, settingAugment) {
@@ -174,8 +203,33 @@ function settings(settingName, settingAugment) {
             }
         break
 
+        case "reset":
+            if (prompt("Are you sure? Your progress will be reset. Type 'y' (lowercase) to continue. Press enter to cancel") == "y") {
+                money = 0;
+                workMoney = 0;
+                localStorage.setItem("logging", "True");
+                timeUsed[0] = 0;
+                timeUsed[1] = 0;
+                timeUsed[2] = 0;
+                output("success", "Deleted all user info.");
+            }
+        break
+
         default:
             let cmdStr = "Error. Unrecognized setting " + settingName;
             output("error", cmdStr);
+    }
+}
+
+function job() {
+    if (Date.now() - timeUsed[2] > 10800000) {     // 10800000 is 3 hours
+        workMoney = getRandomInt(150, 300);
+        let cmdStr = "You got a new job that gives you $" + workMoney + " for working!";
+        output("success", cmdStr);
+        timeUsed[2] = Date.now();
+    } else {
+        let timeLeft = Math.ceil(180 - (Date.now() - timeUsed[1])/60000);
+        let cmdStr = "Woah user! You can't switch jobs that fast! You have " + timeLeft + " minutes before you can switch jobs again!";
+        output("warning", cmdStr);
     }
 }

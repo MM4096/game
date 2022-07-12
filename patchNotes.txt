@@ -28,3 +28,12 @@ Balance Changes:
     Begging chance 1/3 -> 1/5
     Begging cooldown 7s -> 8s
     Working minimum money $100 -> $150
+
+
+V0.4 Unreleased:
+Yay! We finished V0.3!
+New:
+JOBS! get a job. If you don't have one, you cannot work. [job] gives you a job with money from 150-300, which will not change, unless you use it again.
+cooldown: 3h
+
+Reset: Using settings reset will open a prompt. Typing [y] into it will reset all data. Beware!

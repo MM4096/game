@@ -99,6 +99,10 @@ function enter() {
             job();
             break
 
+        case "dig":
+            dig();
+            break
+
         default:
             let cmdStr = "Invalid command '" + command[0] + "'. Use help to see a list of commands"
             output("error", cmdStr);
@@ -223,7 +227,15 @@ function settings(settingName, settingAugment) {
 
 function job() {
     if (Date.now() - timeUsed[2] > 10800000) {     // 10800000 is 3 hours
-        workMoney = getRandomInt(150, 300);
+        if (workMoney >= 0) {
+            if (workMoney - 100 < 1) {
+                workMoney = getRandomInt(150, 300);
+            } else {
+                workMoney = getRandomInt(workMoney - 100, workMoney + 150);
+            }
+        } else {
+            workMoney = getRandomInt(150, 300);
+        }
         let cmdStr = "You got a new job that gives you $" + workMoney + " for working!";
         output("success", cmdStr);
         timeUsed[2] = Date.now();

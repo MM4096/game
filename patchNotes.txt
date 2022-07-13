@@ -37,3 +37,7 @@ JOBS! get a job. If you don't have one, you cannot work. [job] gives you a job w
 cooldown: 3h
 
 Reset: Using settings reset will open a prompt. Typing [y] into it will reset all data. Beware!
+
+V0.4.1 Unreleased:
+Balance Changes:
+    Getting a new job will now give you money between -$100 and +$150 from your previous job.

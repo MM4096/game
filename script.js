@@ -4,7 +4,10 @@ var workMoney = 0;
 // index 0 is used for begging
 // index 1 is used for working
 // index 2 is for time before you can get a new job
-var timeUsed = [0, 0, 0];
+// index 3 is for digging
+var timeUsed = [0, 0, 0, 0];
+// index 1 is used for shovel
+var items = [0]
 
 window.onbeforeunload = function () {
     saveProgress();
@@ -23,24 +26,21 @@ $(document).ready(function() {
         }
     }
 
-    if (localStorage.getItem("timeUsed0") != null) {
-        timeUsed[0] = parseFloat(localStorage.getItem("timeUsed0"));
-        if (localStorage.getItem("logging") == "True") {
-        output("success", ">>Restored data component: timeUsed0");
+    for (let i = 0; i < timeUsed.length; i++) {
+        if (localStorage.getItem("timeUsed" + i) != null) {
+            timeUsed[i] = parseFloat(localStorage.getItem("timeUsed" + i));
+            if (localStorage.getItem("logging") == "True") {
+            output("success", ">>Restored data component: timeUsed" + i);
+            }
         }
     }
 
-    if (localStorage.getItem("timeUsed1") != null) {
-        timeUsed[1] = parseFloat(localStorage.getItem("timeUsed1"));
-        if (localStorage.getItem("logging") == "True") {
-            output("success", ">>Restored data component: timeUsed1");
-        }
-    }
-
-    if (localStorage.getItem("timeUsed2") != null) {
-        timeUsed[2] = parseFloat(localStorage.getItem("timeUsed2"));
-        if (localStorage.getItem("logging") == "True") {
-            output("success", ">>Restored data component: timeUsed2");
+    for (let i = 0; i < items.length; i++) {
+        if (localStorage.getItem("item" + i) != null) {
+            items[i] = parseFloat(localStorage.getItem("item" + i));
+            if (localStorage.getItem("logging") == "True") {
+            output("success", ">>Restored data component: item" + i);
+            }
         }
     }
 
@@ -97,6 +97,10 @@ function enter() {
 
         case "job":
             job();
+            break
+            
+        case "buy":
+            buy(command[1])
             break
 
         case "dig":
@@ -185,9 +189,14 @@ function work() {
 
 function saveProgress() {
     localStorage.setItem("money", money);
-    localStorage.setItem("timeUsed0", timeUsed[0]);
-    localStorage.setItem("timeUsed1", timeUsed[1]);
-    localStorage.setItem("timeUsed2", timeUsed[2]);
+    for (let i = 0; i < timeUsed.length; i++) {
+        let cmdStr = "timeUsed" + i
+        localStorage.setItem(cmdStr, timeUsed[i]);
+    }
+    for (let i = 0; i < items.length; i++) {
+        let cmdStr = "item" + i
+        localStorage.setItem(cmdStr, items[i]);
+    }
     localStorage.setItem("jobMoney", workMoney);
 }
 
@@ -243,5 +252,54 @@ function job() {
         let timeLeft = Math.ceil(180 - (Date.now() - timeUsed[1])/60000);
         let cmdStr = "Woah user! You can't switch jobs that fast! You have " + timeLeft + " minutes before you can switch jobs again!";
         output("warning", cmdStr);
+    }
+}
+
+function buy(item) {
+    switch (item) {
+        case "shovel":
+            if (money > 2999) {
+                money -= 2999;
+                items[0] += 1;
+                let cmdStr = "You bought: <i>shovel</i> x1!";
+                output("success", cmdStr);
+            } else {
+                let cmdStr = "You don't have enough money to buy <shovel> for $3000. You need $" + (3000 - money) + " more.";
+                output("warning", cmdStr);
+            }
+        break
+
+        default:
+            if (item == null || item == undefined) {
+                output("error", "buy command is missing 1 required augment 'item'");
+            } else {
+                output("error", "item <i>" + item + "</i> does not exist (yet)")
+            }
+    }
+}
+
+function dig() {
+    if (items[0] > 0) {
+        if (Date.now() - timeUsed[3] > 10000) { // 10 000 is 10 seconds
+
+            if (getRandomInt(1, 6) == 1) {
+                added = getRandomInt(3, 7);
+                money += added;
+                let cmdStr = "Yay! you got $" + added + "!";
+                output("success", cmdStr);
+        
+            } else if (getRandomInt(1, 21) == 1) {
+                items[0] -= 1;
+                output("error", "Oh no! Your shovel broke!")
+            } else {
+                output("normal", "You got nothing. What did you expect? You're digging, after all.");
+            }
+            timeUsed[3] = Date.now();
+        } else {
+            let timeLeft = Math.ceil(10 - (Date.now() - timeUsed[3]) / 1000);
+            output("warning", "Chill out user! You can't dig so fast! You have " + timeLeft + " seconds before you can dig again");
+        }
+    } else {
+        output("warning", "You don't have a shovel. You wouldn't like to dig without one now, do you? Use <i>buy shovel</i> to buy one for $3000");
     }
 }

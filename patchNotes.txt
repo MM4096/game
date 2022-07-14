@@ -47,3 +47,7 @@ Balance Changes:
     Begging cooldown: 8sec -> 7sec
     Begging chance: 1/5 -> 1/3
     Begging maximum money: $10 -> $5
+
+V0.5 Unreleased:
+Shop! Use the <buy> command to buy items! At current, you can buy only shovels.
+Dig! Use your shovel to dig out money! (your shovel can break >:)

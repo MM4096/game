@@ -112,10 +112,10 @@ function enter() {
 
 
 function beg() {
-    if (Date.now() - timeUsed[0] > 8000) {
+    if (Date.now() - timeUsed[0] > 7000) {
 
-        if (getRandomInt(1, 6) == 1) {
-            added = getRandomInt(1, 10);
+        if (getRandomInt(1, 4) == 1) {
+            added = getRandomInt(1, 5);
             money += added;
             let cmdStr = "Yay! you got $" + added + "!";
             output("success", cmdStr);
@@ -125,7 +125,7 @@ function beg() {
         }
         timeUsed[0] = Date.now();
     } else {
-        let timeLeft = Math.ceil(8 - (Date.now() - timeUsed[0]) / 1000);
+        let timeLeft = Math.ceil(7 - (Date.now() - timeUsed[0]) / 1000);
         output("warning", "Chill out user! You can't beg so fast! You have " + timeLeft + " seconds before you can beg again");
     }
     

@@ -8,6 +8,7 @@ var workMoney = 0;
 var timeUsed = [0, 0, 0, 0];
 // index 1 is used for shovel
 var items = [0]
+var frenzy = 0
 
 window.onbeforeunload = function () {
     saveProgress();
@@ -50,6 +51,17 @@ $(document).ready(function() {
             output("success", ">>Restored data component: jobMoney");
         }
     }
+    if (localStorage.getItem("frenzy") != null) {
+        frenzy = parseInt(localStorage.getItem("frenzy"));
+        if (localStorage.getItem("logging") == "True") {
+            output("success", ">>Restored data component: frenzy")
+        }
+    }
+
+    if (getRandomInt(1, 101) == 1 && Date.now - frenzy > 10800000) {
+        output("success", "Frenzy! Cooldown halved!");
+        frenzy = Date.now();
+    }
 
     output("warning", "To turn on/off logging, use settings logging on/off");
 
@@ -67,6 +79,21 @@ $(document).on('keypress',function(e) {
         enter();
     }
 });
+
+// checks for frenzy
+
+function isFrenzy() {
+    let date = Date.now()
+    if (frenzy > date - 3600000) {
+        let timeLeft = 60 - Math.ceil((date - frenzy)/60000);
+        let outputStr = "Frenzy active for " + timeLeft + " minutes";
+        output("success", outputStr);
+        return true;
+    } else {
+        print("no")
+        return false;
+    }
+}
 
 // Command entering
 function enter() {
@@ -116,7 +143,11 @@ function enter() {
 
 
 function beg() {
-    if (Date.now() - timeUsed[0] > 7000) {
+    let cooldown = 7000
+    if (isFrenzy()) {
+        cooldown = 3500
+    }
+    if (Date.now() - timeUsed[0] > cooldown) {
 
         if (getRandomInt(1, 4) == 1) {
             added = getRandomInt(1, 5);
@@ -129,7 +160,7 @@ function beg() {
         }
         timeUsed[0] = Date.now();
     } else {
-        let timeLeft = Math.ceil(7 - (Date.now() - timeUsed[0]) / 1000);
+        let timeLeft = Math.ceil((cooldown / 1000) - (Date.now() - timeUsed[0]) / 1000);
         output("warning", "Chill out user! You can't beg so fast! You have " + timeLeft + " seconds before you can beg again");
     }
     
@@ -167,7 +198,11 @@ function help() {
 }
 
 function work() {
-    if (Date.now() - timeUsed[1] > 3600000) {     // 3600000 is one hour
+    let cooldown = 3600000
+    if (isFrenzy()) {
+        cooldown = 1800000
+    }
+    if (Date.now() - timeUsed[1] > cooldown) {     // 3600000 is one hour
         if (workMoney > 0) {
             added = workMoney;
             money += added;
@@ -181,7 +216,7 @@ function work() {
             }
         }
     } else {
-        let timeLeft = Math.ceil(60 - (Date.now() - timeUsed[1])/60000);
+        let timeLeft = Math.ceil((cooldown / 1000) - (Date.now() - timeUsed[1])/60000);
         let cmdStr = "Woah user! You're too exited for work! You have " + timeLeft + " minutes before you can work again!";
         output("warning", cmdStr);
     }
@@ -198,6 +233,7 @@ function saveProgress() {
         localStorage.setItem(cmdStr, items[i]);
     }
     localStorage.setItem("jobMoney", workMoney);
+    localStorage.setItem("frenzy", frenzy);
 }
 
 function settings(settingName, settingAugment) {
@@ -258,8 +294,8 @@ function job() {
 function buy(item) {
     switch (item) {
         case "shovel":
-            if (money > 2999) {
-                money -= 2999;
+            if (money > 1999) {
+                money -= 2000;
                 items[0] += 1;
                 let cmdStr = "You bought: <i>shovel</i> x1!";
                 output("success", cmdStr);
@@ -279,8 +315,12 @@ function buy(item) {
 }
 
 function dig() {
+    let cooldown = 10000;
+    if (isFrenzy()) {
+        cooldown = 5000;
+    }
     if (items[0] > 0) {
-        if (Date.now() - timeUsed[3] > 10000) { // 10 000 is 10 seconds
+        if (Date.now() - timeUsed[3] > cooldown) { // 10 000 is 10 seconds
 
             if (getRandomInt(1, 6) == 1) {
                 added = getRandomInt(3, 7);
@@ -296,7 +336,7 @@ function dig() {
             }
             timeUsed[3] = Date.now();
         } else {
-            let timeLeft = Math.ceil(10 - (Date.now() - timeUsed[3]) / 1000);
+            let timeLeft = Math.ceil((cooldown / 1000) - (Date.now() - timeUsed[3]) / 1000);
             output("warning", "Chill out user! You can't dig so fast! You have " + timeLeft + " seconds before you can dig again");
         }
     } else {

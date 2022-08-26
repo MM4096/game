@@ -51,3 +51,10 @@ Balance Changes:
 V0.5 Unreleased:
 Shop! Use the <buy> command to buy items! At current, you can buy only shovels.
 Dig! Use your shovel to dig out money! (your shovel can break >:)
+
+V1.0:
+Releasing game! How exiting!
+Frenzy! Low chance of all cooldowns being halved for 1 hour!
+
+Balance Changes:
+    Shovel cost: $3000 -> $2000

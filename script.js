@@ -90,7 +90,6 @@ function isFrenzy() {
         output("success", outputStr);
         return true;
     } else {
-        print("no")
         return false;
     }
 }

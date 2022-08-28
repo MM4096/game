@@ -3,6 +3,7 @@ patchNotes = `V1.0.1:<br>
 Lots of bug fixes! (I won't list them out, I'll be here for the next 7 hours)<br>
 Patch notes when you join the game (like now!)<br>
 Hints! (look at the bottom of the outputs)<br>
+DISCORD: https://discord.gg/EAegydFW<br>
 <br>
 Balance Changes:<br>
     Shovel breaking chance: 5% -> 2%<br>`
@@ -24,4 +25,5 @@ hintText = ["Did you know: This game is based off another <i>game</i>",
             "#",
             "1997",
             "DM at discord.com!",
-            "Digging away!"]
+            "Digging away!",
+            "Discord? https://discord.gg/EAegydFW"]

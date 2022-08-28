@@ -58,3 +58,11 @@ Frenzy! Low chance of all cooldowns being halved for 1 hour!
 
 Balance Changes:
     Shovel cost: $3000 -> $2000
+
+V1.0.1:
+Lots of bug fixes! (I won't list them out, I'll be here for the next 7 hours)
+Patch notes when you join the game (like now!)
+Hints! (look at the bottom of the outputs)
+
+Balance Changes:
+    Shovel breaking chance: 5% -> 2%

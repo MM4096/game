@@ -9,6 +9,7 @@ var timeUsed = [0, 0, 0, 0];
 // index 1 is used for shovel
 var items = [0]
 var frenzy = 0
+const version = "1.0.1"
 
 window.onbeforeunload = function () {
     saveProgress();
@@ -17,6 +18,33 @@ window.onbeforeunload = function () {
 
 // Function to load saved data. Use >> for logging.
 $(document).ready(function() {
+    hint();
+    restore();
+    getVersion();
+})
+
+function hint() {
+    hintNumber = getRandomInt(0, hintText.length - 1);
+    output("normal", hintText[hintNumber]);
+}
+
+function getVersion() {
+    let lastVersion = localStorage.getItem("version");
+    if (lastVersion == null) {
+        patchNote()
+    } else if (lastVersion != version) {
+        patchNote()
+    }
+    localStorage.setItem("version", version)
+}
+// define "patchNotes" in text.js
+function patchNote() {
+    output("normal", patchNotes);
+    output("use <i>help</i> to see all avalible commands!")
+}
+
+function restore() {
+
     if (localStorage.getItem("logging") == null) {
         localStorage.setItem("logging", "True")
     }
@@ -64,9 +92,7 @@ $(document).ready(function() {
     }
 
     output("warning", "To turn on/off logging, use settings logging on/off");
-
-})
-
+}
 
 //From mozarilla js docs (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
 function getRandomInt(min, max) {
@@ -215,7 +241,7 @@ function work() {
             }
         }
     } else {
-        let timeLeft = Math.ceil((cooldown / 1000) - (Date.now() - timeUsed[1])/60000);
+        let timeLeft = Math.ceil((cooldown / 60000) - (Date.now() - timeUsed[1])/60000);
         let cmdStr = "Woah user! You're too exited for work! You have " + timeLeft + " minutes before you can work again!";
         output("warning", cmdStr);
     }
@@ -299,7 +325,7 @@ function buy(item) {
                 let cmdStr = "You bought: <i>shovel</i> x1!";
                 output("success", cmdStr);
             } else {
-                let cmdStr = "You don't have enough money to buy <shovel> for $3000. You need $" + (3000 - money) + " more.";
+                let cmdStr = "You don't have enough money to buy <shovel> for $2000. You need $" + (2000 - money) + " more.";
                 output("warning", cmdStr);
             }
         break
@@ -327,11 +353,11 @@ function dig() {
                 let cmdStr = "Yay! you got $" + added + "!";
                 output("success", cmdStr);
         
-            } else if (getRandomInt(1, 21) == 1) {
+            } else if (getRandomInt(1, 51) == 1) {
                 items[0] -= 1;
                 output("error", "Oh no! Your shovel broke!")
             } else {
-                output("normal", "You got nothing. What did you expect? You're digging, after all.");
+                output("normal", "You got dirt. What did you expect? You're digging, after all.");
             }
             timeUsed[3] = Date.now();
         } else {
@@ -339,6 +365,6 @@ function dig() {
             output("warning", "Chill out user! You can't dig so fast! You have " + timeLeft + " seconds before you can dig again");
         }
     } else {
-        output("warning", "You don't have a shovel. You wouldn't like to dig without one now, do you? Use <i>buy shovel</i> to buy one for $3000");
+        output("warning", "You don't have a shovel. You wouldn't like to dig without one now, do you? Use <i>buy shovel</i> to buy one for $2000");
     }
 }

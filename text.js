@@ -26,4 +26,5 @@ hintText = ["Did you know: This game is based off another <i>game</i>",
             "1997",
             "DM at discord.com!",
             "Digging away!",
-            "Discord? https://discord.gg/EAegydFW"]
+            "Discord? https://discord.gg/EAegydFW",
+            "THIS WILL NEVER SHOW UP!"]
